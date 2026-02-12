@@ -238,4 +238,4 @@ This implementation uses more modern design choices (closer to LLaMA):
 
 ## License
 
-Art project. Same spirit as the original — learn from it, play with it, share it.
+MIT — learn from it, play with it, share it. See [LICENSE](LICENSE).
