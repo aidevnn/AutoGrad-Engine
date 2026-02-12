@@ -12,6 +12,8 @@ It trains a tiny GPT model on a list of human names, then generates new ones tha
 
 **This is not production code.** It's an educational tool. It processes one number at a time where real implementations process millions in parallel on GPUs. But every conceptual piece of a real GPT is here.
 
+**New to ML?** Start with the [Prerequisites guide](PREREQUISITES.md) — it covers all the math and ML concepts you need, from scratch.
+
 ## Project Structure
 
 | File | Responsibility |
