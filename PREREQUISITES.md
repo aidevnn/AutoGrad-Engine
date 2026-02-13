@@ -1,6 +1,8 @@
-# Prerequisites — What You Need to Know
+# Prerequisites — What you need to know
 
 Everything you need to understand MicroGPT, starting from scratch. No prior machine learning experience required. We assume basic secondary school math and build up from there.
+
+> **📖 How to read this document:** You'll see math formulas throughout, but **you don't need to memorize or even fully understand every formula.** Focus on the **analogies and "Why it matters" sections** — those carry the core intuition. The formulas are here so you can reference them when reading the code. If a formula feels overwhelming, skip it and keep reading — the next paragraph usually explains the same idea in plain English.
 
 ---
 
@@ -160,9 +162,13 @@ Total = 1.0
 
 The **derivative** answers: "If I nudge the input a tiny bit, how much does the output change?"
 
+**Everyday example:** Think of a car's speedometer. Your position is a function of time. The derivative of your position is your *speed* — how fast your position is changing. If you're parked, the derivative is 0. If you're on the highway, it's large. The derivative doesn't tell you *where* you are; it tells you *how quickly you're moving*.
+
 For $f(x) = x^2$:
 - At $x = 3$: $f(3) = 9$. If we nudge to $x = 3.001$: $f(3.001) = 9.006001$. The output changed by about $0.006$ for a $0.001$ nudge — that's a rate of $6$. The derivative is $f'(3) = 6$.
 - Formula: $f'(x) = 2x$. At $x = 3$: $f'(3) = 2 \times 3 = 6$. ✓
+
+> **Notation note:** $f'(x)$ is read as "f prime of x" — it just means "the derivative of $f$." When you see the prime mark ('), think "rate of change."
 
 **Common derivative rules you'll see in the code:**
 
@@ -185,6 +191,10 @@ You don't need to memorize these. The point is: **every math operation has a der
 What if functions are **chained** together? If $y = f(g(x))$ — that is, first apply $g$, then apply $f$ to the result — the chain rule says:
 
 $$\frac{dy}{dx} = \frac{dy}{dg} \times \frac{dg}{dx}$$
+
+> **Notation note:** $\frac{dy}{dx}$ is read as "the derivative of $y$ with respect to $x$" — it means "how much does $y$ change when I nudge $x$?" Think of it as a fraction: change in output divided by change in input.
+
+**Real-world analogy:** Suppose you earn euros, your friend converts euros to dollars, and then converts dollars to yen. If 1 euro = 1.1 dollars, and 1 dollar = 150 yen, then 1 euro = $1.1 \times 150 = 165$ yen. You just **multiplied the conversion rates**. The chain rule works the same way — multiply the rates of change at each step.
 
 **Concrete example:**
 
@@ -367,6 +377,8 @@ Where $t$ is the current step and $T$ is the total number of steps.
 
 **Adam** (Adaptive Moment Estimation) is a smarter version of gradient descent. Plain gradient descent uses the raw gradient directly. Adam improves on this in two ways:
 
+> **If the formulas below feel overwhelming, here's the key intuition:** Adam is like a ball rolling downhill that (1) builds up speed when it keeps going the same direction (momentum), and (2) takes smaller steps on steep slopes and larger steps on gentle ones (adaptive rate). That's it — the formulas below are how this is computed, but the idea is just "smart rolling ball."
+
 **1. Momentum (first moment, $m$)**
 
 Instead of using just the current gradient, Adam keeps a running average of recent gradients:
@@ -382,8 +394,6 @@ Adam also tracks how much each parameter's gradient varies:
 $$v_t = 0.95 \times v_{t-1} + 0.05 \times g_t^2$$
 
 Parameters with consistently large gradients get smaller updates. Parameters with small, noisy gradients get larger updates. Each parameter effectively gets its own tuned learning rate.
-
-**The update rule:**
 
 **3. Bias correction**
 
@@ -437,6 +447,8 @@ The squaring makes it smoother and more selective — it emphasizes larger value
 
 $$\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$$
 
+> **Notation note:** The symbol $\sum$ (capital sigma) means "add them all up." So $\sum_j e^{x_j}$ means "compute $e^x$ for every element, then sum all the results." It's just shorthand for "total."
+
 **Step by step example:**
 
 Logits: $[2.0, 1.0, 0.1]$
@@ -487,7 +499,7 @@ An **embedding** is a learned vector (list of numbers) that represents a token. 
 ```
 Token 'a' (ID 2)  → [0.12, -0.34, 0.56, 0.78, ...]    (16 numbers)
 Token 'b' (ID 3)  → [-0.23, 0.45, 0.01, -0.67, ...]   (16 numbers)
-Token 'm' (ID 15) → [0.89, 0.11, -0.44, 0.33, ...]    (16 numbers)
+Token 'm' (ID 14) → [0.89, 0.11, -0.44, 0.33, ...]    (16 numbers)
 ```
 
 These vectors are **not designed by a human.** They start as random numbers and are adjusted during training. After training, tokens with similar roles develop similar vectors. For example, vowels might cluster together in this vector space.
@@ -605,6 +617,8 @@ As data flows through many layers, values can grow very large or shrink to near 
 1. Compute the average squared value: $\text{ms} = \frac{1}{n}\sum x_i^2$
 2. Scale all values so the average squared magnitude is ~1: $\hat{x}_i = \frac{x_i}{\sqrt{\text{ms} + \epsilon}}$
 
+> In plain English: take all the numbers, square them, find the average, then divide every number by the square root of that average. This shrinks large values and magnifies small ones so they're all in a similar range.
+
 The $\epsilon$ (a tiny number like $10^{-5}$) prevents division by zero.
 
 **Analogy:** Think of it like an automatic volume control on a microphone. Whether someone whispers or shouts, the output level stays consistent.
@@ -684,7 +698,7 @@ Here's the complete picture of what happens when you run MicroGPT:
 
 **Setup:**
 1. Download 32,000 human names
-2. Build a tokenizer (28 characters + BOS + EOS)
+2. Build a tokenizer (26 letters + BOS + EOS = 28 tokens)
 3. Initialize random weight matrices (3,648 numbers with default settings)
 
 **Training (1,000 steps):**
