@@ -1,6 +1,6 @@
 # MicroGPT.cs
 
-A complete GPT language model — training and inference — in pure C# with zero dependencies.
+A complete [GPT](https://en.wikipedia.org/wiki/Generative_pre-trained_transformer) language model — training and inference — in pure C# with zero dependencies.
 
 Faithful port of [Andrej Karpathy's microgpt.py](https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95).
 
@@ -103,7 +103,7 @@ Tokens with similar roles end up with similar vectors. The model also has **posi
 
 ### Step 3: The Transformer Layer
 
-Each layer has two sub-blocks: **Attention** and **MLP** — or as Andrej Karpathy puts it: **communication** followed by **computation**. Attention gathers information from other tokens (communication), and the MLP processes that information (computation).
+Each layer has two sub-blocks: **Attention** and **[MLP](https://en.wikipedia.org/wiki/Multilayer_perceptron)** — or as Andrej Karpathy puts it: **communication** followed by **computation**. Attention gathers information from other tokens (communication), and the MLP processes that information (computation).
 
 #### Attention: "Which past tokens matter right now?"
 
@@ -154,13 +154,13 @@ loss = -log(probability of correct answer)
 If the model said 90% for the right answer: loss = -log(0.9) ≈ 0.1 (good).
 If the model said 1% for the right answer: loss = -log(0.01) ≈ 4.6 (bad).
 
-This is called **cross-entropy loss**. Lower is better.
+This is called **[cross-entropy loss](https://en.wikipedia.org/wiki/Cross-entropy)**. Lower is better.
 
 ### Step 6: Backpropagation — "How do I improve?"
 
 This is where the `Value` class earns its keep.
 
-Every math operation in the model was done using `Value` objects that secretly recorded the computation graph. Now we walk backward through that graph (from loss to parameters) using the chain rule from calculus.
+Every math operation in the model was done using `Value` objects that secretly recorded the computation graph. Now we walk backward through that graph (from loss to parameters) using the [chain rule](https://en.wikipedia.org/wiki/Chain_rule) from calculus.
 
 After backprop, every parameter knows its **gradient**: "if I increase this number by 0.001, the loss changes by X." Negative gradient means increasing the parameter reduces the loss — which is what we want.
 
@@ -178,7 +178,7 @@ Plain gradient descent would just do: `parameter -= learning_rate * gradient`. A
 
 Start with BOS. Feed through the model. Get probabilities for the next character. Randomly sample a character (weighted by probabilities). Feed that character back in. Repeat until EOS or max length.
 
-This is called **autoregressive generation**. It's how every GPT model generates text — one token at a time, each output becoming the next input.
+This is called **[autoregressive generation](https://en.wikipedia.org/wiki/Autoregressive_model)**. It's how every GPT model generates text — one token at a time, each output becoming the next input.
 
 ## How This Compares to the Real Thing
 
@@ -196,38 +196,38 @@ The algorithm is identical. Everything else is scale and engineering.
 
 ## Key Concepts Glossary
 
-**Autograd** — Automatic differentiation. The system that tracks all math operations and computes gradients automatically. Replaces the need to derive gradient formulas by hand.
+**[Autograd](https://en.wikipedia.org/wiki/Automatic_differentiation)** — Automatic differentiation. The system that tracks all math operations and computes gradients automatically. Replaces the need to derive gradient formulas by hand.
 
-**Backpropagation** — Walking backward through the computation graph to compute gradients. Uses the chain rule: if A→B→C, then dC/dA = dC/dB × dB/dA.
+**[Backpropagation](https://en.wikipedia.org/wiki/Backpropagation)** — Walking backward through the computation graph to compute gradients. Uses the chain rule: if A→B→C, then dC/dA = dC/dB × dB/dA.
 
-**Embedding** — A learned vector that represents a token (or position) as a list of numbers. Tokens with similar roles develop similar vectors during training.
+**[Embedding](https://en.wikipedia.org/wiki/Word_embedding)** — A learned vector that represents a token (or position) as a list of numbers. Tokens with similar roles develop similar vectors during training.
 
-**Gradient** — How much the loss would change if you nudged a parameter by a tiny amount. Points in the direction of steepest increase. We go the opposite way to reduce loss.
+**[Gradient](https://en.wikipedia.org/wiki/Gradient)** — How much the loss would change if you nudged a parameter by a tiny amount. Points in the direction of steepest increase. We go the opposite way to reduce loss.
 
 **KV Cache** — Storage for Key and Value vectors from past tokens. Avoids recomputing them when processing new tokens. Essential for efficient generation.
 
 **Loss** — A single number measuring how wrong the model's predictions are. Training = making this number go down.
 
-**Residual Connection** — Adding the input of a layer back to its output. Lets information and gradients flow freely through deep networks.
+**[Residual Connection](https://en.wikipedia.org/wiki/Residual_neural_network)** — Adding the input of a layer back to its output. Lets information and gradients flow freely through deep networks.
 
-**Softmax** — Converts raw scores into probabilities that sum to 1. Higher scores get exponentially higher probabilities.
+**[Softmax](https://en.wikipedia.org/wiki/Softmax_function)** — Converts raw scores into probabilities that sum to 1. Higher scores get exponentially higher probabilities.
 
-**Weight Tying** — Reusing the token embedding matrix as the output projection. The same matrix maps tokens→vectors and vectors→tokens.
+**[Weight Tying](https://en.wikipedia.org/wiki/Weight_tying)** — Reusing the token embedding matrix as the output projection. The same matrix maps tokens→vectors and vectors→tokens.
 
 ## Differences from GPT-2
 
-This implementation uses more modern design choices (closer to LLaMA):
+This implementation uses more modern design choices (closer to [LLaMA](https://en.wikipedia.org/wiki/LLaMA)):
 
-- **RMSNorm** instead of LayerNorm (simpler, fewer operations)
+- **[RMSNorm](https://en.wikipedia.org/wiki/Root_mean_square#Normalization)** instead of [LayerNorm](https://en.wikipedia.org/wiki/Layer_normalization) (simpler, fewer operations)
 - **No biases** anywhere (fewer parameters, works fine without them)
-- **Squared ReLU** instead of GELU (more selective activation)
+- **Squared ReLU** instead of [GELU](https://en.wikipedia.org/wiki/Activation_function#GELU) (more selective activation)
 - **Pre-norm** architecture (normalize before each sub-block, not after)
 
 ## Changes from the Python Original
 
-- Iterative topological sort in `Backward()` (Python's recursive version would overflow C#'s stack)
+- Iterative [topological sort](https://en.wikipedia.org/wiki/Topological_sorting) in `Backward()` (Python's recursive version would overflow C#'s stack)
 - CLI argument parsing via simple flag parser (replacing Python's argparse)
-- Box-Muller transform for Gaussian random numbers (.NET doesn't have `random.gauss`)
+- [Box–Muller transform](https://en.wikipedia.org/wiki/Box%E2%80%93Muller_transform) for Gaussian random numbers (.NET doesn't have `random.gauss`)
 - Cumulative distribution sampling for weighted random choice (replacing Python's `random.choices`)
 - Explicit parameter ordering (Python dicts maintain insertion order by spec; C# `Dictionary` doesn't guarantee it)
 

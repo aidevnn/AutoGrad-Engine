@@ -43,7 +43,7 @@ Everything you need to understand MicroGPT, starting from scratch. No prior mach
 
 ## 1. Functions
 
-A **function** takes an input and produces an output. You've seen these since school:
+A **[function](https://en.wikipedia.org/wiki/Function_(mathematics))** takes an input and produces an output. You've seen these since school:
 
 $$f(x) = 2x + 3$$
 
@@ -57,11 +57,11 @@ In this project, every operation the model does is a function. The entire neural
 
 ## 2. Exponents
 
-An **exponent** means repeated multiplication:
+An **[exponent](https://en.wikipedia.org/wiki/Exponentiation)** means repeated multiplication:
 
 $$2^3 = 2 \times 2 \times 2 = 8$$
 
-The special number $e \approx 2.718$ shows up everywhere in math. The function $e^x$ (often written `exp(x)`) has a magical property: **it's always positive**, and it grows very fast for large $x$.
+The special number [$e$](https://en.wikipedia.org/wiki/E_(mathematical_constant)) $\approx 2.718$ shows up everywhere in math. The function $e^x$ (often written `exp(x)`) has a magical property: **it's always positive**, and it grows very fast for large $x$.
 
 ```
 e^0   = 1
@@ -77,7 +77,7 @@ e^(-2) ≈ 0.14
 
 ## 3. Logarithms
 
-The **logarithm** is the reverse of an exponent. If $e^x = y$, then $\ln(y) = x$.
+The **[logarithm](https://en.wikipedia.org/wiki/Logarithm)** is the reverse of an exponent. If $e^x = y$, then $\ln(y) = x$.
 
 ```
 ln(1)    = 0       because e^0 = 1
@@ -98,7 +98,7 @@ Key properties:
 
 ## 4. Vectors
 
-A **vector** is just a list of numbers:
+A **[vector](https://en.wikipedia.org/wiki/Vector_(mathematics_and_physics))** is just a list of numbers:
 
 $$\mathbf{v} = [0.5, -1.2, 3.0, 0.8]$$
 
@@ -112,7 +112,7 @@ $$[1, 2, 3] + [4, 5, 6] = [5, 7, 9]$$
 **Scalar multiplication** — multiply every element by a number:
 $$3 \times [1, 2, 3] = [3, 6, 9]$$
 
-**Dot product** — multiply corresponding elements, then sum:
+**[Dot product](https://en.wikipedia.org/wiki/Dot_product)** — multiply corresponding elements, then sum:
 $$[1, 2, 3] \cdot [4, 5, 6] = 1{\times}4 + 2{\times}5 + 3{\times}6 = 32$$
 
 The dot product measures **similarity**. If two vectors point in the same direction, their dot product is large and positive. If they're unrelated, it's near zero. If they point in opposite directions, it's negative.
@@ -123,7 +123,7 @@ The dot product measures **similarity**. If two vectors point in the same direct
 
 ## 5. Matrices and Matrix Multiplication
 
-A **matrix** is a grid (table) of numbers. Think of it as a stack of vectors:
+A **[matrix](https://en.wikipedia.org/wiki/Matrix_(mathematics))** is a grid (table) of numbers. Think of it as a stack of vectors:
 
 $$W = \begin{bmatrix} 2 & 1 \\ 0 & 3 \end{bmatrix}$$
 
@@ -139,7 +139,7 @@ Each row of the matrix decides "how much of each input do I want?" The numbers i
 
 ## 6. Probability Basics
 
-A **probability** is a number between 0 and 1 that represents how likely something is. Probabilities of all possible outcomes must sum to 1.
+A **[probability](https://en.wikipedia.org/wiki/Probability)** is a number between 0 and 1 that represents how likely something is. Probabilities of all possible outcomes must sum to 1.
 
 Example — predicting the next letter after "Em":
 ```
@@ -150,7 +150,7 @@ P(a) = 0.10
 Total = 1.0
 ```
 
-**Probability distribution** — the full list of probabilities for all possible outcomes. The model outputs one of these at every step: a probability for each character in the vocabulary.
+**[Probability distribution](https://en.wikipedia.org/wiki/Probability_distribution)** — the full list of probabilities for all possible outcomes. The model outputs one of these at every step: a probability for each character in the vocabulary.
 
 **Sampling** — picking a random outcome according to the probabilities. If $P(m) = 0.45$, then about 45% of the time we'd pick "m." This is how the model generates diverse outputs — it doesn't always pick the most likely letter.
 
@@ -160,7 +160,7 @@ Total = 1.0
 
 ## 7. Derivatives — The Concept of "How Fast Is It Changing?"
 
-The **derivative** answers: "If I nudge the input a tiny bit, how much does the output change?"
+The **[derivative](https://en.wikipedia.org/wiki/Derivative)** answers: "If I nudge the input a tiny bit, how much does the output change?"
 
 **Everyday example:** Think of a car's speedometer. Your position is a function of time. The derivative of your position is your *speed* — how fast your position is changing. If you're parked, the derivative is 0. If you're on the highway, it's large. The derivative doesn't tell you *where* you are; it tells you *how quickly you're moving*.
 
@@ -188,7 +188,7 @@ You don't need to memorize these. The point is: **every math operation has a der
 
 ## 8. The Chain Rule
 
-What if functions are **chained** together? If $y = f(g(x))$ — that is, first apply $g$, then apply $f$ to the result — the chain rule says:
+What if functions are **chained** together? If $y = f(g(x))$ — that is, first apply $g$, then apply $f$ to the result — the [chain rule](https://en.wikipedia.org/wiki/Chain_rule) says:
 
 $$\frac{dy}{dx} = \frac{dy}{dg} \times \frac{dg}{dx}$$
 
@@ -214,7 +214,7 @@ At $x = 2$: the derivative is $18 \times 2 = 36$. Check: $(3 \times 2)^2 = 36$, 
 
 ## 9. Computation Graphs and Automatic Differentiation
 
-A **computation graph** is a diagram showing how values flow through operations. Every operation is a node, and the arrows show which values feed into which operations.
+A **[computation graph](https://en.wikipedia.org/wiki/Computational_graph)** is a diagram showing how values flow through operations. Every operation is a node, and the arrows show which values feed into which operations.
 
 Example: $y = (a + b) \times c$
 
@@ -229,7 +229,7 @@ Each node knows:
 1. What operation it performs (its forward rule)
 2. How to pass gradients backward (its backward rule)
 
-**Automatic differentiation (autograd)** means the computer builds this graph as you compute, then walks it backward to compute all gradients automatically. You never write derivative formulas by hand.
+**[Automatic differentiation](https://en.wikipedia.org/wiki/Automatic_differentiation) (autograd)** means the computer builds this graph as you compute, then walks it backward to compute all gradients automatically. You never write derivative formulas by hand.
 
 **In the code:** The `Value` class is exactly this. Every time you write `a + b` or `a * b`, it creates a new `Value` node that remembers its inputs and the operation. When you call `Backward()`, it walks the graph in reverse, applying the chain rule at each node.
 
@@ -239,7 +239,7 @@ Each node knows:
 
 ## 10. What Is a Neural Network?
 
-A **neural network** is a function that:
+A **[neural network](https://en.wikipedia.org/wiki/Artificial_neural_network)** is a function that:
 1. Takes an input (e.g., a letter)
 2. Passes it through a series of **layers** (each layer is matrix multiplication + some nonlinear function)
 3. Produces an output (e.g., probabilities for the next letter)
@@ -262,7 +262,7 @@ In MicroGPT (with default settings), there are **3,648 parameters**. They includ
 - **Attention weights** — matrices that compute Query, Key, and Value projections
 - **MLP weights** — matrices in the feed-forward layers
 
-At the start of training, all parameters are **random** (small random numbers from a bell curve). After training, they encode the statistical patterns of the training data — in our case, what English names look and sound like.
+At the start of training, all parameters are **random** (small random numbers from a [bell curve](https://en.wikipedia.org/wiki/Normal_distribution)). After training, they encode the statistical patterns of the training data — in our case, what English names look and sound like.
 
 **Why it matters:** When someone says "GPT-4 has 1.8 trillion parameters," they mean it has 1.8 trillion learnable numbers in its matrices. MicroGPT has 3,648. Same concept, vastly different scale.
 
@@ -286,9 +286,9 @@ In the code, this is the `GPT()` function. It takes a token ID and position, run
 
 ## 13. Loss Functions — "How Wrong Are We?"
 
-The **loss** is a single number measuring how bad the model's prediction was. Lower is better.
+The **[loss](https://en.wikipedia.org/wiki/Loss_function)** is a single number measuring how bad the model's prediction was. Lower is better.
 
-MicroGPT uses **cross-entropy loss**:
+MicroGPT uses **[cross-entropy loss](https://en.wikipedia.org/wiki/Cross-entropy)**:
 
 $$\text{loss} = -\ln(p_{\text{correct}})$$
 
@@ -311,7 +311,7 @@ The loss drops toward 0 as the model gets more confident in the right answer, an
 
 ## 14. Gradient Descent — Learning by Nudging
 
-**Gradient descent** is the algorithm that adjusts parameters to reduce the loss. The idea is beautifully simple:
+**[Gradient descent](https://en.wikipedia.org/wiki/Gradient_descent)** is the algorithm that adjusts parameters to reduce the loss. The idea is beautifully simple:
 
 1. Compute the gradient (derivative) of the loss with respect to each parameter
 2. The gradient tells you the direction that **increases** the loss
@@ -330,7 +330,7 @@ Where $\eta$ (eta) is the **learning rate** — how big a step to take.
 
 ## 15. Backpropagation — Computing All Gradients at Once
 
-**Backpropagation** (backprop) is the efficient algorithm for computing gradients of the loss with respect to every parameter in the network.
+**[Backpropagation](https://en.wikipedia.org/wiki/Backpropagation)** (backprop) is the efficient algorithm for computing gradients of the loss with respect to every parameter in the network.
 
 The naive approach — nudge each parameter one at a time and measure the change — would require one forward pass per parameter. With 5,000 parameters, that's 5,000 forward passes per training step. Unacceptable.
 
@@ -357,7 +357,7 @@ Input → [op1] → [op2] → [op3] → Loss
 
 ## 16. Learning Rate
 
-The **learning rate** ($\eta$) controls how big each parameter update step is.
+The **[learning rate](https://en.wikipedia.org/wiki/Learning_rate)** ($\eta$) controls how big each parameter update step is.
 
 - **Too high:** Parameters overshoot the optimal values. The loss jumps around wildly or explodes.
 - **Too low:** Training is too slow. The model barely moves toward better values.
@@ -375,7 +375,7 @@ Where $t$ is the current step and $T$ is the total number of steps.
 
 ## 17. The Adam Optimizer
 
-**Adam** (Adaptive Moment Estimation) is a smarter version of gradient descent. Plain gradient descent uses the raw gradient directly. Adam improves on this in two ways:
+**[Adam](https://en.wikipedia.org/wiki/Stochastic_gradient_descent#Adam)** (Adaptive Moment Estimation) is a smarter version of gradient descent. Plain gradient descent uses the raw gradient directly. Adam improves on this in two ways:
 
 > **If the formulas below feel overwhelming, here's the key intuition:** Adam is like a ball rolling downhill that (1) builds up speed when it keeps going the same direction (momentum), and (2) takes smaller steps on steep slopes and larger steps on gentle ones (adaptive rate). That's it — the formulas below are how this is computed, but the idea is just "smart rolling ball."
 
@@ -415,9 +415,9 @@ The $\epsilon$ (a tiny number like $10^{-8}$) prevents division by zero.
 
 ## 18. Activation Functions
 
-An **activation function** is a simple nonlinear function applied after matrix multiplication. Without it, stacking layers would be pointless — multiple matrix multiplications in a row can always be collapsed into a single matrix multiplication. The nonlinearity is what gives neural networks their power.
+An **[activation function](https://en.wikipedia.org/wiki/Activation_function)** is a simple nonlinear function applied after matrix multiplication. Without it, stacking layers would be pointless — multiple matrix multiplications in a row can always be collapsed into a single matrix multiplication. The nonlinearity is what gives neural networks their power.
 
-**ReLU (Rectified Linear Unit):** The simplest and most popular.
+**[ReLU](https://en.wikipedia.org/wiki/Rectifier_(neural_networks)) (Rectified Linear Unit):** The simplest and most popular.
 
 $$\text{ReLU}(x) = \max(0, x)$$
 
@@ -443,7 +443,7 @@ The squaring makes it smoother and more selective — it emphasizes larger value
 
 ## 19. Softmax — Turning Numbers into Probabilities
 
-**Softmax** converts a list of arbitrary numbers (called **logits**) into probabilities that sum to 1.
+**[Softmax](https://en.wikipedia.org/wiki/Softmax_function)** converts a list of arbitrary numbers (called **logits**) into probabilities that sum to 1.
 
 $$\text{softmax}(x_i) = \frac{e^{x_i}}{\sum_j e^{x_j}}$$
 
@@ -472,7 +472,7 @@ Result: probabilities $[0.66, 0.24, 0.10]$ that sum to $1.0$.
 
 ## 20. Tokenization
 
-**Tokenization** is converting text into numbers that the model can process.
+**[Tokenization](https://en.wikipedia.org/wiki/Lexical_analysis#Tokenization)** is converting text into numbers that the model can process.
 
 In MicroGPT, each character becomes a number:
 
@@ -494,7 +494,7 @@ The name "emma" becomes the sequence: `[0, 6, 14, 14, 2, 1]` → BOS, e, m, m, a
 
 ## 21. Embeddings — Numbers That Represent Meaning
 
-An **embedding** is a learned vector (list of numbers) that represents a token. Instead of feeding the raw token ID (just a number like 7) into the model, we look up its embedding — a richer representation.
+An **[embedding](https://en.wikipedia.org/wiki/Word_embedding)** is a learned vector (list of numbers) that represents a token. Instead of feeding the raw token ID (just a number like 7) into the model, we look up its embedding — a richer representation.
 
 ```
 Token 'a' (ID 2)  → [0.12, -0.34, 0.56, 0.78, ...]    (16 numbers)
@@ -512,7 +512,7 @@ These vectors are **not designed by a human.** They start as random numbers and 
 
 ## 22. Sequence Models and Language Modeling
 
-A **language model** predicts the next token given the previous tokens. That's the entire goal.
+A **[language model](https://en.wikipedia.org/wiki/Language_model)** predicts the next token given the previous tokens. That's the entire goal.
 
 Given: "E", "m", "m" → Predict: "a" (with high probability)
 
@@ -533,7 +533,7 @@ Each prediction is a forward pass through the model. The loss is averaged across
 
 ## 23. Attention — "What Should I Focus On?"
 
-**Attention** is the mechanism that lets the model look at all previous tokens and decide which ones are relevant for predicting the next one.
+**[Attention](https://en.wikipedia.org/wiki/Attention_(machine_learning))** is the mechanism that lets the model look at all previous tokens and decide which ones are relevant for predicting the next one.
 
 **The restaurant analogy:**
 
@@ -588,7 +588,7 @@ After all heads compute their outputs, the results are concatenated back togethe
 
 ## 25. Residual Connections
 
-A **residual connection** (or skip connection) means adding the input of a block back to its output:
+A **[residual connection](https://en.wikipedia.org/wiki/Residual_neural_network)** (or skip connection) means adding the input of a block back to its output:
 
 $$\text{output} = \text{Block}(x) + x$$
 
@@ -598,7 +598,7 @@ Instead of the layer completely replacing the input, it only needs to learn the 
 
 1. **Information flow:** If a layer has nothing useful to add, it can output near-zero, and the input passes through unchanged. The model doesn't have to "re-learn" information that was already there.
 
-2. **Gradient flow:** During backpropagation, the addition operation lets gradients flow straight through to earlier layers without being modified. Without residual connections, gradients can shrink (vanish) as they pass through many layers, making deep networks impossible to train.
+2. **Gradient flow:** During backpropagation, the addition operation lets gradients flow straight through to earlier layers without being modified. Without residual connections, gradients can shrink ([vanish](https://en.wikipedia.org/wiki/Vanishing_gradient_problem)) as they pass through many layers, making deep networks impossible to train.
 
 **In MicroGPT:** Every attention block and every MLP block has a residual connection. The pattern is: save input → process → add saved input back.
 
@@ -612,7 +612,7 @@ Instead of the layer completely replacing the input, it only needs to learn the 
 
 As data flows through many layers, values can grow very large or shrink to near zero. Both are bad — large values cause numerical overflow, and tiny values cause underflow. Either way, training becomes unstable.
 
-**RMSNorm** (Root Mean Square Normalization) — used in MicroGPT:
+**[RMSNorm](https://en.wikipedia.org/wiki/Root_mean_square#Normalization)** (Root Mean Square Normalization) — used in MicroGPT:
 
 1. Compute the average squared value: $\text{ms} = \frac{1}{n}\sum x_i^2$
 2. Scale all values so the average squared magnitude is ~1: $\hat{x}_i = \frac{x_i}{\sqrt{\text{ms} + \epsilon}}$
@@ -629,7 +629,7 @@ The $\epsilon$ (a tiny number like $10^{-5}$) prevents division by zero.
 
 ## 27. The Transformer Architecture
 
-The **Transformer** is the architecture used by all GPT models. Now you know every piece — here's how they fit together:
+The **[Transformer](https://en.wikipedia.org/wiki/Transformer_(deep_learning_architecture))** is the architecture used by all GPT models. Now you know every piece — here's how they fit together:
 
 ```
 Input token
@@ -664,7 +664,7 @@ Input token
 
 Each transformer layer does two things:
 1. **Attention:** Look at the past and decide what's relevant
-2. **MLP:** Process the gathered information
+2. **[MLP](https://en.wikipedia.org/wiki/Multilayer_perceptron):** Process the gathered information
 
 Both have residual connections and normalization. Stack more layers for deeper "reasoning."
 
@@ -674,7 +674,7 @@ Both have residual connections and normalization. Stack more layers for deeper "
 
 ## 28. Autoregressive Generation
 
-**Autoregressive generation** means generating one token at a time, where each generated token becomes input for the next step.
+**[Autoregressive](https://en.wikipedia.org/wiki/Autoregressive_model) generation** means generating one token at a time, where each generated token becomes input for the next step.
 
 ```
 Step 1: Input [BOS]        → Model predicts probabilities → Sample 'S'
