@@ -555,7 +555,7 @@ The attention score between two tokens is the dot product of one token's Q and a
 
 $$\text{score}(i, j) = \frac{Q_i \cdot K_j}{\sqrt{d}}$$
 
-The division by $\sqrt{d}$ (where $d$ is the vector dimension) keeps the scores from getting too large, which would make softmax output nearly one-hot (too confident about one token).
+The division by $\sqrt{d}$ (where $d$ is the vector dimension) is crucial and has a precise mathematical reason. When Q and K vectors have entries with roughly unit variance (which they do at initialization), their dot product is a sum of $d$ random products — so the variance of the dot product grows proportionally to $d$. For large $d$, the raw scores can become very large in magnitude, which pushes softmax toward a one-hot distribution (all weight on one token, everything else near zero). Dividing by $\sqrt{d}$ rescales the scores back to unit variance, keeping softmax "diffuse" enough to attend to multiple tokens. Without this scaling, the model starts training with saturated attention patterns and learns very slowly.
 
 These scores are passed through softmax to get weights that sum to 1. The output is a weighted sum of all V vectors.
 
@@ -729,6 +729,7 @@ Here's the complete picture of what happens when you run MicroGPT:
 
 **Neural networks from scratch:**
 - [3Blue1Brown — Neural Networks](https://www.youtube.com/playlist?list=PLZHQObOWTQDNU6R1_67000Dx_ZCJB-3pi) — Excellent visual introduction
+- [Karpathy — "Let's build GPT from scratch"](https://www.youtube.com/watch?v=kCc8FmEb1nY) — The specific video lecture this project builds on
 - [Karpathy — Neural Networks: Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ) — Complete video series building up to GPT from scratch
 
 **Transformers and GPT:**

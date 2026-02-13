@@ -6,7 +6,7 @@
 //
 // This is the exact same algorithm behind ChatGPT, stripped to its essence.
 // Real GPTs have billions of parameters and run on GPU clusters.
-// This one has ~5,000 parameters and runs on a single CPU thread.
+// This one has ~3,600 parameters and runs on a single CPU thread.
 // But every conceptual piece is here. Everything else is "just" optimization.
 //
 // What does it do? It learns to generate fake human names by reading real ones.

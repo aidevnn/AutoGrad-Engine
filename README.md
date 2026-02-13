@@ -6,7 +6,7 @@ Faithful port of [Andrej Karpathy's microgpt.py](https://gist.github.com/karpath
 
 ## What is this?
 
-This is the exact same algorithm that powers ChatGPT, in ~600 lines of C# across 4 files. No PyTorch, no TensorFlow, no NuGet packages. Just plain C# and math.
+This is the exact same algorithm that powers ChatGPT, in ~400 lines of code across 4 files (plus extensive comments explaining every piece). No PyTorch, no TensorFlow, no NuGet packages. Just plain C# and math.
 
 It trains a tiny GPT model on a list of human names, then generates new ones that sound real but never existed.
 
@@ -52,9 +52,9 @@ dotnet run -- --n_embd 32 --n_layer 2 --num_steps 2000
 
 ```
 vocab size: 28, num docs: 32033
-num params: 5360
-step 1 / 1000 | loss 3.4507
-step 2 / 1000 | loss 3.3121
+num params: 3648
+step 1 / 1000 | loss 3.3327
+step 2 / 1000 | loss 3.3090
 ...
 step 1000 / 1000 | loss 2.1844
 
@@ -103,11 +103,13 @@ Tokens with similar roles end up with similar vectors. The model also has **posi
 
 ### Step 3: The Transformer Layer
 
-Each layer has two sub-blocks: **Attention** and **MLP**.
+Each layer has two sub-blocks: **Attention** and **MLP** — or as Andrej Karpathy puts it: **communication** followed by **computation**. Attention gathers information from other tokens (communication), and the MLP processes that information (computation).
 
 #### Attention: "Which past tokens matter right now?"
 
-This is the key innovation behind GPT. For each token, the model looks at every previous token and decides which ones are relevant.
+**Why it's needed:** Without attention, each token is processed in complete isolation — the model at position 5 has no idea what tokens appeared at positions 1–4. This is the baseline "bigram" approach: each token independently predicts the next one using only a lookup table. It works, but poorly — it can learn that 'e' is often followed by 'n', but can't learn that 'e' after 'Emm' should be followed by 'a'.
+
+Attention solves this by letting each token look at all previous tokens and decide which ones are relevant. The insight is that this is really just a **weighted average**. Start with the simplest version: average all past token vectors equally. Better: weight them so recent tokens matter more. Best: let the model *learn* which tokens matter based on their content. That's what Q/K/V attention does — it computes data-dependent weights for this average.
 
 It works through three projections per token:
 
@@ -115,7 +117,7 @@ It works through three projections per token:
 - **Key (K):** "What do I contain?"
 - **Value (V):** "What information do I offer if selected?"
 
-The model computes a score between the current token's Query and every past token's Key (via dot product). High score = that past token is relevant. These scores become weights (via softmax), and the output is a weighted blend of all the Value vectors.
+The model computes a score between the current token's Query and every past token's Key (via dot product). High score = that past token is relevant. These scores are divided by $\sqrt{d}$ to keep them in a stable range (without this, large dimensions cause softmax to collapse to a one-hot distribution). The scaled scores become weights (via softmax), and the output is a weighted blend of all the Value vectors.
 
 **Multi-head attention** splits this into parallel "heads" — each head can learn different patterns. One might track consonant sequences, another might focus on name length.
 
@@ -123,9 +125,9 @@ The model computes a score between the current token's Query and every past toke
 
 #### MLP: "Now think about it."
 
-After attention gathers information, the MLP processes it. It expands the vector to 4x width (giving the model more "thinking space"), applies an activation function (squared ReLU), then compresses back down.
+After attention gathers information (communication), the MLP processes it (computation). It expands the vector to 4x width (giving the model more "thinking space"), applies an activation function (squared ReLU), then compresses back down.
 
-Think of attention as "what info do I need?" and MLP as "what do I do with it?"
+Think of attention as "gathering relevant context" and MLP as "reasoning about it." Each token first collects information from other positions, then independently processes what it collected.
 
 #### Residual Connections
 
@@ -182,7 +184,7 @@ This is called **autoregressive generation**. It's how every GPT model generates
 
 | | MicroGPT | GPT-4 |
 |---|---|---|
-| Parameters | ~5,000 | ~1,800,000,000,000 |
+| Parameters | ~3,600 | ~1,800,000,000,000 |
 | Token type | Characters | Word pieces (~100K vocab) |
 | Context window | 8 tokens | ~128,000 tokens |
 | Training data | 32K names | Trillions of words |
@@ -233,7 +235,8 @@ This implementation uses more modern design choices (closer to LLaMA):
 
 - [Karpathy's original microgpt.py](https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95) — The Python source
 - [Karpathy's micrograd](https://github.com/karpathy/micrograd) — The autograd engine this builds on
-- [Karpathy's Neural Networks: Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ) — Video series building up to GPT from scratch
+- [Karpathy's "Let's build GPT from scratch"](https://www.youtube.com/watch?v=kCc8FmEb1nY) — The specific video lecture this project builds on
+- [Karpathy's Neural Networks: Zero to Hero](https://www.youtube.com/playlist?list=PLAqhIrjkxbuWI23v9cThsA9GvCAUhRvKZ) — Full video series building up to GPT from scratch
 - [Attention Is All You Need (2017)](https://arxiv.org/abs/1706.03762) — The original transformer paper
 - [GPT-2 Paper](https://cdn.openai.com/better-language-models/language_models_are_unsupervised_multitask_learners.pdf) — The GPT-2 paper
 - [The Illustrated Transformer](https://jalammar.github.io/illustrated-transformer/) — Visual explanation of the architecture
