@@ -30,48 +30,30 @@ It trains a tiny GPT model on a list of human names, then generates new ones tha
 
 ## Architecture
 
-```
-┌──────────────────────────────────────────────────────────────────────┐
-│                         TRAINING LOOP                               │
-│                                                                     │
-│  "emma" ──► Tokenizer ──► [BOS, e, m, m, a, EOS]                   │
-│                                    │                                │
-│              ┌─────────────────────▼──────────────────────┐         │
-│              │              GPT MODEL                     │         │
-│              │                                            │         │
-│              │  Token Embedding ──┐                       │         │
-│              │                    ├──► x                  │         │
-│              │  Position Embedding┘                       │         │
-│              │                                            │         │
-│              │  ┌─────── Transformer Layer ──────────┐    │         │
-│              │  │                                    │    │         │
-│              │  │  RMSNorm ──► Multi-Head Attention  │    │         │
-│              │  │              (Q·K/√d → softmax → V)│    │         │
-│              │  │              + Residual Connection  │    │         │
-│              │  │                                    │    │         │
-│              │  │  RMSNorm ──► MLP (expand → ReLU²   │    │         │
-│              │  │              → compress)            │    │         │
-│              │  │              + Residual Connection  │    │         │
-│              │  │                                    │    │         │
-│              │  └──────────── × n_layer ────────────┘    │         │
-│              │                                            │         │
-│              │  Linear (weight-tied with Token Embedding) │         │
-│              │         │                                  │         │
-│              └─────────┼──────────────────────────────────┘         │
-│                        ▼                                            │
-│                     Softmax ──► Probabilities                       │
-│                        │                                            │
-│                        ▼                                            │
-│               Cross-Entropy Loss                                    │
-│                        │                                            │
-│                        ▼                                            │
-│                   Backward()    ◄── Value autograd engine           │
-│                        │            (chain rule through             │
-│                        ▼             computation graph)             │
-│                  Adam Optimizer                                     │
-│                   (update all parameters)                           │
-│                                                                     │
-└─────────────────────── × num_steps ─────────────────────────────────┘
+```mermaid
+flowchart TD
+    subgraph LOOP["TRAINING LOOP (× num_steps)"]
+        A["'emma'"] -->|Tokenizer| B["[BOS, e, m, m, a, EOS]"]
+
+        subgraph GPT["GPT MODEL"]
+            C["Token Embedding + Position Embedding"] --> D["x"]
+
+            subgraph TF["Transformer Layer (× n_layer)"]
+                E["RMSNorm → Multi-Head Attention\n(Q·K/√d → softmax → V)\n+ Residual Connection"]
+                F["RMSNorm → MLP\n(expand → ReLU² → compress)\n+ Residual Connection"]
+                E --> F
+            end
+
+            D --> TF
+            TF --> G["Linear (weight-tied with Token Embedding)"]
+        end
+
+        B --> GPT
+        G --> H["Softmax → Probabilities"]
+        H --> I["Cross-Entropy Loss"]
+        I --> J["Backward() ← Value autograd engine\n(chain rule through computation graph)"]
+        J --> K["Adam Optimizer\n(update all parameters)"]
+    end
 ```
 
 ## Quick Start
