@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![.NET](https://img.shields.io/badge/.NET-10.0-512bd4)](https://dotnet.microsoft.com/)
 
-A complete [GPT](https://en.wikipedia.org/wiki/Generative_pre-trained_transformer) language model — training and inference — in pure C# with zero dependencies.
+A complete [GPT](https://en.wikipedia.org/wiki/Generative_pre-trained_transformer) language model (training and inference) in pure C# with zero dependencies.
 
 Faithful port of [Andrej Karpathy's microgpt.py](https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95).
 
