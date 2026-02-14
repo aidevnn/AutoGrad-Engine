@@ -10,11 +10,11 @@ Faithful port of [Andrej Karpathy's microgpt.py](https://gist.github.com/karpath
 
 ## What is this?
 
-This is the exact same algorithm that powers ChatGPT, in ~400 lines of code across 4 files (plus extensive comments explaining every piece). No PyTorch, no TensorFlow, no NuGet packages. Just plain C# and math.
+This is the exact same algorithm that powers ChatGPT, in ~600 lines of code across 4 files (plus extensive comments explaining every piece). No PyTorch, no TensorFlow, no NuGet packages. Just plain C# and math.
 
 It trains a tiny GPT model on a list of human names, then generates new ones that sound real but never existed.
 
-**This is not production code.** It's an educational tool. It processes one number at a time where real implementations process millions in parallel on GPUs. But every conceptual piece of a real GPT is here.
+**This is not production code.** It's an educational tool. It processes one number at a time, whereas real implementations process millions in parallel on GPUs. But every conceptual piece of a real GPT is here.
 
 **New to ML?** Start with the [Prerequisites guide](PREREQUISITES.md) — it covers all the math and ML concepts you need, from scratch.
 
