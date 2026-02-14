@@ -36,7 +36,7 @@ flowchart TD
         A["'emma'"] -->|Tokenizer| B["[BOS, e, m, m, a, EOS]"]
 
         subgraph GPT["GPT MODEL"]
-            C["Token Embedding + Position Embedding"] --> D["x"]
+            C["Token Embedding + Position Embedding → x"]
 
             subgraph TF["Transformer Layer (× n_layer)"]
                 E["RMSNorm → Multi-Head Attention\n(Q·K/√d → softmax → V)\n+ Residual Connection"]
@@ -44,11 +44,11 @@ flowchart TD
                 E --> F
             end
 
-            D --> TF
+            C --> TF
             TF --> G["Linear (weight-tied with Token Embedding)"]
         end
 
-        B --> GPT
+        B --> C
         G --> H["Softmax → Probabilities"]
         H --> I["Cross-Entropy Loss"]
         I --> J["Backward() ← Value autograd engine\n(chain rule through computation graph)"]
