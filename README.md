@@ -1,5 +1,9 @@
 # MicroGPT.cs
 
+[![Build & Test](https://github.com/milanm/AutoGrad-Engine/actions/workflows/build.yml/badge.svg)](https://github.com/milanm/AutoGrad-Engine/actions/workflows/build.yml)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![.NET](https://img.shields.io/badge/.NET-10.0-512bd4)](https://dotnet.microsoft.com/)
+
 A complete [GPT](https://en.wikipedia.org/wiki/Generative_pre-trained_transformer) language model — training and inference — in pure C# with zero dependencies.
 
 Faithful port of [Andrej Karpathy's microgpt.py](https://gist.github.com/karpathy/8627fe009c40f57531cb18360106ce95).
@@ -22,6 +26,53 @@ It trains a tiny GPT model on a list of human names, then generates new ones tha
 | `Tokenizer.cs` | Character-level tokenizer with `Encode()`/`Decode()` |
 | `NeuralOps.cs` | Stateless neural-net building blocks: `Linear`, `Softmax`, `RMSNorm` |
 | `Program.cs` | GPT model, training loop (`Train`), and generation (`Generate`) |
+| `ValueTests.cs` | 25 tests — numerical gradient checking, ops correctness, roundtrips |
+
+## Architecture
+
+```
+┌──────────────────────────────────────────────────────────────────────┐
+│                         TRAINING LOOP                               │
+│                                                                     │
+│  "emma" ──► Tokenizer ──► [BOS, e, m, m, a, EOS]                   │
+│                                    │                                │
+│              ┌─────────────────────▼──────────────────────┐         │
+│              │              GPT MODEL                     │         │
+│              │                                            │         │
+│              │  Token Embedding ──┐                       │         │
+│              │                    ├──► x                  │         │
+│              │  Position Embedding┘                       │         │
+│              │                                            │         │
+│              │  ┌─────── Transformer Layer ──────────┐    │         │
+│              │  │                                    │    │         │
+│              │  │  RMSNorm ──► Multi-Head Attention  │    │         │
+│              │  │              (Q·K/√d → softmax → V)│    │         │
+│              │  │              + Residual Connection  │    │         │
+│              │  │                                    │    │         │
+│              │  │  RMSNorm ──► MLP (expand → ReLU²   │    │         │
+│              │  │              → compress)            │    │         │
+│              │  │              + Residual Connection  │    │         │
+│              │  │                                    │    │         │
+│              │  └──────────── × n_layer ────────────┘    │         │
+│              │                                            │         │
+│              │  Linear (weight-tied with Token Embedding) │         │
+│              │         │                                  │         │
+│              └─────────┼──────────────────────────────────┘         │
+│                        ▼                                            │
+│                     Softmax ──► Probabilities                       │
+│                        │                                            │
+│                        ▼                                            │
+│               Cross-Entropy Loss                                    │
+│                        │                                            │
+│                        ▼                                            │
+│                   Backward()    ◄── Value autograd engine           │
+│                        │            (chain rule through             │
+│                        ▼             computation graph)             │
+│                  Adam Optimizer                                     │
+│                   (update all parameters)                           │
+│                                                                     │
+└─────────────────────── × num_steps ─────────────────────────────────┘
+```
 
 ## Quick Start
 
@@ -34,6 +85,14 @@ Or with custom settings:
 
 ```bash
 dotnet run -- --n_embd 32 --n_layer 2 --num_steps 2000
+```
+
+### Running Tests
+
+The autograd engine is verified with numerical gradient checking — the same technique PyTorch uses in `torch.autograd.gradcheck`:
+
+```bash
+dotnet test
 ```
 
 ### CLI Arguments

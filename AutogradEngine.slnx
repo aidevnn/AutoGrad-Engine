@@ -2,4 +2,7 @@
   <Folder Name="/src/">
     <Project Path="src/AutogradEngine/AutogradEngine.csproj" />
   </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/AutogradEngine.Tests/AutogradEngine.Tests.csproj" />
+  </Folder>
 </Solution>

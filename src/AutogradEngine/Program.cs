@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -86,7 +87,7 @@ public class MicroGPT
     static double ParseArg(string[] args, string name, double defaultVal)
     {
         for (int i = 0; i < args.Length - 1; i++)
-            if (args[i] == $"--{name}") return double.Parse(args[i + 1]);
+            if (args[i] == $"--{name}") return double.Parse(args[i + 1], CultureInfo.InvariantCulture);
         return defaultVal;
     }
 
